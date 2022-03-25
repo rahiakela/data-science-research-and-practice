@@ -76,7 +76,7 @@ def output_bin_coverage(i):
   print(f"The bin for frequency range {range_string} contains {count} element{'' if count == 1 else 's'}")
   
 # Computing a high confidence interval
-def compute_high_confidence_interval(likelihoods, bin_width):
+def compute_high_confidence_interval(likelihoods, bin_width, bin_edges):
   peak_index = likelihoods.argmax()
   area = likelihoods[peak_index] * bin_width
   start_index, end_index = peak_index, peak_index + 1
