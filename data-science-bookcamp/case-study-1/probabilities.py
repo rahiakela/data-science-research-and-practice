@@ -61,3 +61,35 @@ def generate_coin_sample_space(num_flips=10):
     heads_count = len([outcome for outcome in coin_flips if outcome == "heads"])
     weighted_sample_space[heads_count] += 1
   return weighted_sample_space
+
+def frequency_heads(coin_flip_sequence):
+  total_heads = len([head for head in coin_flip_sequence if head == 1])
+  return total_heads / len(coin_flip_sequence)
+  
+# Getting a bin’s frequency and size
+def output_bin_coverage(i):
+  # A bin at position i contains counts[i] frequencies
+  count = int(counts[i])  
+  # A bin at position i covers a frequency range of bin_edges[i] through bin_edges[i+1]
+  range_start, range_end = bin_edges[i], bin_edges[i + 1]
+  range_string = f"{range_start} - {range_end}"
+  print(f"The bin for frequency range {range_string} contains {count} element{'' if count == 1 else 's'}")
+  
+# Computing a high confidence interval
+def compute_high_confidence_interval(likelihoods, bin_width):
+  peak_index = likelihoods.argmax()
+  area = likelihoods[peak_index] * bin_width
+  start_index, end_index = peak_index, peak_index + 1
+
+  while area < 0.95:
+    if start_index > 0:
+      start_index -= 1
+    if end_index < likelihoods.size - 1:
+      end_index += 1
+    area = likelihoods[start_index: end_index + 1].sum() * bin_width
+
+  range_start, range_end = bin_edges[start_index], bin_edges[end_index]
+  range_string = f"{range_start:.6f} - {range_end:.6f}"
+  print(f"The frequency range {range_string} represents a {100 * area:.2f}% confidence interval")
+
+  return start_index, end_index
